@@ -39,10 +39,6 @@ jobs:
     steps:
     - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
-    - name: Support longpaths
-      run: git config --system core.longpaths true
-      if: matrix.platform == 'windows-latest'
-
     - name: Cache Conda Environment
       uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
       with:
@@ -59,9 +55,6 @@ jobs:
 
     - name: Remove conflicting libraries
       shell: bash -l {0}
-      if: matrix.platform == 'windows-latest'
-      run: |
-          rm -rf C:/Strawberry || /bin/true
 
     - name: Setup
       shell: bash -l {0}
@@ -73,8 +66,3 @@ jobs:
       run: |
           source ../ci/travis/conda/compile.sh
       working-directory: ./gdal-feedstock
-
-    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
-      with:
-        name: ${{ matrix.platform }}-conda-package
-        path: ./gdal-feedstock/packages/
